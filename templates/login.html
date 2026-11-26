@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mercy’s Money Diary</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<style>
+html{font-size:18px}body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Fredoka,sans-serif;font-weight:500;color:#3a1020;background:radial-gradient(rgba(123,30,58,.09) 1.5px,transparent 2px) 0 0/26px 26px,linear-gradient(135deg,#fde3ec,#ffe5d6,#f1e4ff,#fbdde7)}
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes pulse{50%{transform:scale(1.12)}}
+form{width:min(380px,90vw);background:rgba(255,247,246,.95);border-radius:56px 10px 56px 10px;padding:36px;text-align:center;box-shadow:0 12px 32px rgba(123,30,58,.25),inset 0 0 0 2px rgba(232,88,143,.55);animation:up .8s}
+svg{width:46px;height:46px;fill:#e8588f;animation:pulse 2s infinite}
+h1{margin:6px 0 18px;font-size:1.6rem;background:linear-gradient(90deg,#7b1e3a,#e8588f,#ff7eb3);-webkit-background-clip:text;background-clip:text;color:transparent}
+input,button{font:inherit;width:100%;padding:12px 14px;border-radius:16px;border:2px solid #ffd0bf;margin-bottom:12px}
+button{border:0;color:#fff;font-weight:600;cursor:pointer;background:linear-gradient(90deg,#7b1e3a,#c04a6b,#e8588f)}
+p{color:#c0143c;margin:0 0 10px}
+</style></head><body>
+<form method="post"><svg viewBox="0 0 24 24"><path d="M12 21.5 3.2 12.8a5.6 5.6 0 0 1 7.9-7.9l.9.9.9-.9a5.6 5.6 0 0 1 7.9 7.9z"/></svg>
+<h1>Mercy’s Money Diary</h1>
+{% if err %}<p>{{err}}</p>{% endif %}
+<input type="password" name="password" placeholder="Password" autofocus required>
+<button>Open my diary</button></form></body></html>

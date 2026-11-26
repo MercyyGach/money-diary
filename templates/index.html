@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mercy’s Money Diary</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--tx:#3a1020;--bur:#7b1e3a;--gold:#e8588f;--pink:#e8588f;--lav:#9b7ff0;--peach:#ff9a6b;--sun:#ff9a6b;--mint:#7b1e3a;--sky:#c04a6b}
+html{font-size:18px}
+*{box-sizing:border-box}
+@keyframes bg{50%{background-position:100% 100%}}
+@keyframes drift{to{background-position:52px 52px,62px 62px}}
+@keyframes up{from{opacity:0;transform:translateY(34px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes float{from{transform:translateY(0) rotate(0)}to{transform:translateY(-115vh) rotate(360deg)}}
+@keyframes pulse{50%{transform:scale(1.03)}}
+@keyframes sheen{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+@keyframes gold{to{background-position:300% 0}}
+@keyframes twinkle{0%,100%{opacity:.1;transform:scale(.3) rotate(0)}50%{opacity:.9;transform:scale(1) rotate(45deg)}}
+@keyframes glit{0%{transform:translate(-50%,-50%) scale(0) rotate(0);opacity:1}40%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(90deg)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),34px) scale(0) rotate(240deg)}}
+@keyframes wig{25%{transform:rotate(-14deg) scale(1.15)}75%{transform:rotate(14deg) scale(1.15)}}
+body{margin:0;font-family:Fredoka,sans-serif;font-weight:500;color:var(--tx);min-height:100vh;background:linear-gradient(135deg,#fde3ec,#ffe5d6,#f1e4ff,#ffe9d9,#fbdde7);background-size:400% 400%;animation:bg 20s ease infinite}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(rgba(123,30,58,.09) 1.5px,transparent 2px) 0 0/26px 26px,repeating-linear-gradient(45deg,rgba(232,88,143,.1) 0 1px,transparent 1px 22px);animation:drift 40s linear infinite}
+.i{width:1.15em;height:1.15em;fill:currentColor;vertical-align:-.2em;flex:none}
+.deco,.tw{position:fixed;z-index:0;pointer-events:none;fill:currentColor}
+.deco{top:100vh;opacity:.5;animation:float linear infinite}
+.tw{animation:twinkle ease-in-out infinite;filter:drop-shadow(0 0 4px #ff7eb3)}
+.spark{position:fixed;z-index:99;pointer-events:none;fill:currentColor;filter:drop-shadow(0 0 3px #ff7eb3);animation:glit .9s ease-out forwards}
+main{position:relative;z-index:1;max-width:1100px;margin:auto;padding:20px}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}
+h1{margin:0;font-weight:600;font-size:2.1rem;display:flex;align-items:center;gap:10px}
+h1 .i{color:var(--pink);animation:pulse 2s infinite;filter:drop-shadow(0 0 5px #ff7eb3)}
+.gold{background:linear-gradient(90deg,#7b1e3a,#e8588f,#ff7eb3,#7b1e3a);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gold 6s linear infinite}
+.card{position:relative;overflow:hidden;background-color:rgba(255,247,246,.94);border-radius:56px 10px 56px 10px;padding:28px 32px;margin-top:18px;box-shadow:0 10px 28px rgba(123,30,58,.18),inset 0 0 0 2px rgba(232,88,143,.55);animation:up .8s backwards;animation-delay:calc(var(--n,0)*70ms);transition:transform .3s,box-shadow .3s}
+.card:nth-child(3n+1){background-image:radial-gradient(rgba(123,30,58,.1) 2px,transparent 2.5px);background-size:20px 20px}
+.card:nth-child(3n+2){background-image:repeating-linear-gradient(45deg,rgba(255,154,107,.18) 0 2px,transparent 2px 14px)}
+.card:nth-child(3n){background-image:linear-gradient(60deg,rgba(232,88,143,.08) 25%,transparent 25%,transparent 75%,rgba(232,88,143,.08) 75%),linear-gradient(-60deg,rgba(255,154,107,.14) 25%,transparent 25%,transparent 75%,rgba(255,154,107,.14) 75%);background-size:30px 52px}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.85) 50%,transparent 65%);transform:translateX(-130%);animation:sheen 7s ease-in-out infinite;animation-delay:calc(var(--n,0)*.6s)}
+.card:hover{transform:translateY(-7px) rotate(-.4deg);box-shadow:0 20px 42px rgba(123,30,58,.32),inset 0 0 0 2px var(--gold)}
+.card:hover::after{animation-duration:1.4s}
+.card:hover .badge{animation:wig .6s}
+.grid{display:grid;gap:18px;margin-top:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid>.card{margin-top:0}
+.stat{text-align:center;border-radius:90px 90px 22px 22px;padding:36px 18px 22px}
+.stat small{display:block;font-weight:600;font-size:1rem;color:#6b2a40}
+.stat b{display:block;font-size:1.9rem;font-weight:600;color:var(--bur)}
+.stat.t1{background:radial-gradient(rgba(255,255,255,.16) 2px,transparent 2.5px) 0 0/18px 18px,linear-gradient(160deg,#7b1e3a,#a8325a)}
+.stat.t1 b{color:#ffe3d3}.stat.t1 small{color:#ffd0bb}
+.stat.t2{background:repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 3px,transparent 3px 14px),linear-gradient(160deg,#ffd3e3,#ffb8d2)}
+.stat.t3{background:radial-gradient(rgba(123,30,58,.12) 2px,transparent 2.5px) 0 0/18px 18px,linear-gradient(160deg,#ffe6d8,#ffc9ad)}
+.stat.t4{background:repeating-linear-gradient(-45deg,rgba(255,255,255,.4) 0 3px,transparent 3px 14px),linear-gradient(160deg,#e9defd,#d4c2fa)}
+h3{margin:0 0 14px;font-weight:600;font-size:1.3rem;display:flex;align-items:center;gap:10px}
+.badge{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;color:#fff;background:var(--c);box-shadow:0 0 0 3px rgba(232,88,143,.4)}
+input,select,button{font:inherit;padding:11px 14px;border-radius:16px;border:2px solid #ffd0bf;background:#fffaf8;color:var(--tx);width:100%;margin-bottom:9px}
+input:focus,select:focus{outline:none;border-color:var(--c,var(--bur));box-shadow:0 0 0 3px rgba(232,88,143,.3)}
+button{background:linear-gradient(90deg,#7b1e3a,#c04a6b,#e8588f,#7b1e3a);background-size:200% 100%;color:#fff;border:0;font-weight:600;cursor:pointer;transition:.3s}
+button.alt{background:linear-gradient(90deg,#c04a6b,#ff7aa8,#ffa585,#c04a6b);background-size:200% 100%;text-shadow:0 1px 2px rgba(123,30,58,.5)}
+button:hover{transform:translateY(-2px) scale(1.03);background-position:100% 0;box-shadow:0 6px 16px rgba(232,88,143,.4)}
+.mood{border-radius:70px;font-weight:600;text-align:center;font-size:1.2rem;display:flex;gap:10px;justify-content:center;align-items:center;padding:20px}
+.mood.good{background:linear-gradient(90deg,#ffe6d8,#ffd9e6)}
+.mood.bad{background:linear-gradient(90deg,#7b1e3a,#a8325a);color:#fff}
+.mood.par{background:#ffeede}
+.bar{height:12px;background:#ffe3d3;border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#ffb59a,#e8588f,#7b1e3a);border-radius:9px;transition:width 1.4s}
+.bar i.over{background:#c0143c}
+table{width:100%;border-collapse:collapse}td,th{padding:9px 5px;text-align:left;font-size:.95rem}th{color:var(--bur)}tr{border-bottom:1px solid #ffd9c8}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px}
+.del{width:auto;padding:4px 9px;margin:0;background:#ffe3d3;color:var(--bur)}
+.rep p{display:flex;align-items:center;gap:10px;margin:10px 0}.rep .i{color:var(--c)}
+canvas{max-height:300px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="heart" viewBox="0 0 24 24"><path d="M12 21.5 3.2 12.8a5.6 5.6 0 0 1 7.9-7.9l.9.9.9-.9a5.6 5.6 0 0 1 7.9 7.9z"/></symbol>
+<symbol id="flower" viewBox="0 0 24 24"><circle cx="12" cy="6" r="4"/><circle cx="18" cy="11" r="4"/><circle cx="16" cy="18" r="4"/><circle cx="8" cy="18" r="4"/><circle cx="6" cy="11" r="4"/><circle cx="12" cy="12" r="3" fill="#fff" opacity=".85"/></symbol>
+<symbol id="star" viewBox="0 0 24 24"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></symbol>
+<symbol id="bag" viewBox="0 0 24 24"><path d="M5 8h14l1 13H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+<symbol id="coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6" fill="none" stroke="#fff" stroke-width="2"/></symbol>
+<symbol id="trophy" viewBox="0 0 24 24"><path d="M7 3h10v5a5 5 0 0 1-10 0zM10.5 14h3v4h3.5v3H7v-3h3.5z"/><path d="M7 5H3c0 4 2 6 4 6M17 5h4c0 4-2 6-4 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+<symbol id="sprout" viewBox="0 0 24 24"><path d="M11 22V12C11 7 8 5 3 5c0 5 3 7 8 7zM13 16c0-4 3-6 8-6 0 5-3 7-8 6z"/></symbol>
+<symbol id="gem" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9z"/></symbol>
+<symbol id="cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="4"/><path d="M8 3v4M16 3v4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M3 11h18" stroke="#fff" stroke-width="2"/></symbol>
+<symbol id="receipt" viewBox="0 0 24 24"><path d="M5 2h14v20l-3-2-2 2-2-2-2 2-2-2-3 2z"/><path d="M8 8h8M8 12h8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></symbol>
+<symbol id="chart" viewBox="0 0 24 24"><path d="M3 21V10h5v11zM9.500 21V3h5v18zM16 21v-7h5v7z"/></symbol>
+<symbol id="pie" viewBox="0 0 24 24"><path d="M11 3a9 9 0 1 0 9 10h-9z"/><path d="M13 1v9h9a9 9 0 0 0-9-9z"/></symbol>
+<symbol id="trend" viewBox="0 0 24 24"><path d="M2 18l6-7 5 4 8-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11"/><path d="M6.500 12.500l4 4 7-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="alert" viewBox="0 0 24 24"><path d="M12 2 1 21h22z"/><path d="M12 9v6M12 17.800v.4" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
+<symbol id="wallet" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="15" rx="4"/><circle cx="17" cy="12.500" r="2" fill="#fff"/></symbol>
+</defs></svg>
+<div id="deco"></div>
+<main>
+<header><h1><svg class="i"><use href="#heart"/></svg><span class="gold">Mercy’s Money Diary</span></h1><input type="month" id="month" style="width:auto"></header>
+
+<div class="card mood" id="mood">Loading…</div>
+<div class="grid">
+  <div class="card stat t1" style="--c:var(--lav)"><small>Budget</small><b id="sB">–</b></div>
+  <div class="card stat t2" style="--c:var(--pink)"><small>Spent</small><b id="sS">–</b></div>
+  <div class="card stat t3" style="--c:var(--mint)"><small>Left</small><b id="sL">–</b></div>
+  <div class="card stat t4" style="--c:var(--peach)"><small>Extra cash</small><b id="sE">–</b></div>
+</div>
+
+<div class="grid">
+  <div class="card" style="--c:var(--pink)"><h3><span class="badge"><svg class="i"><use href="#bag"/></svg></span>Add expense</h3>
+    <select id="eCat">{% for c in categories %}<option>{{c}}</option>{% endfor %}</select>
+    <input id="eAmt" type="number" min="1" placeholder="Amount (KES)">
+    <input id="eNote" placeholder="Note (optional)"><input id="eDate" type="date">
+    <button onclick="add('expense')">Add expense</button></div>
+  <div class="card" style="--c:var(--mint)"><h3><span class="badge"><svg class="i"><use href="#coin"/></svg></span>Got extra cash?</h3>
+    <input id="iAmt" type="number" min="1" placeholder="Amount (KES)">
+    <input id="iNote" placeholder="From who / what for"><input id="iDate" type="date">
+    <button class="alt" onclick="add('income')">Add cash</button>
+    <small>Extra cash is added to this month’s budget (Cash at Hand).</small></div>
+</div>
+
+<div class="grid">
+  <div class="card" style="--c:var(--lav)"><h3><span class="badge"><svg class="i"><use href="#pie"/></svg></span>Where it went</h3><canvas id="pie"></canvas></div>
+  <div class="card" style="--c:var(--sky)"><h3><span class="badge"><svg class="i"><use href="#chart"/></svg></span>Budget vs spent</h3><canvas id="bars"></canvas></div>
+</div>
+<div class="card" style="--c:var(--peach)"><h3><span class="badge"><svg class="i"><use href="#trend"/></svg></span>Monthly trajectory</h3><canvas id="line"></canvas><p id="trend" style="font-weight:600"></p></div>
+<div class="card" style="--c:var(--pink)"><h3><span class="badge"><svg class="i"><use href="#flower"/></svg></span>Budget breakdown</h3><table id="tbl"></table></div>
+<div class="card rep" style="--c:var(--sun)"><h3><span class="badge"><svg class="i"><use href="#star"/></svg></span>Monthly report</h3><div id="rep"></div></div>
+<div class="card" style="--c:var(--lav)"><h3><span class="badge"><svg class="i"><use href="#receipt"/></svg></span>Transactions</h3><table id="tx"></table></div>
+</main>
+<script>
+const $=id=>document.getElementById(id),kes=n=>'KES '+Number(n).toLocaleString(undefined,{maximumFractionDigits:0});
+const ic=(n,c='',s='')=>`<svg class="i" style="${s}"><use href="#${n}"/></svg>`;
+const colors=['#e8588f','#7b1e3a','#9b7ff0','#ffb59a','#ff7a8a','#c04a6b','#c9b6ff','#ffd3c0','#f48fb1','#a8325a'];
+Chart.defaults.font.family='Fredoka';Chart.defaults.font.weight=500;Chart.defaults.font.size=14;Chart.defaults.color='#3a1020';
+const today=new Date().toISOString().slice(0,10);
+$('month').value=today.slice(0,7);$('eDate').value=$('iDate').value=today;
+$('deco').innerHTML=Array.from({length:16},(_,i)=>`<svg class="tw" style="color:${['#ff9a6b','#fff','#e8588f'][i%3]};left:${Math.random()*100}vw;top:${Math.random()*100}vh;width:${10+Math.random()*14}px;height:${10+Math.random()*14}px;animation-duration:${2+Math.random()*3}s;animation-delay:-${Math.random()*4}s"><use href="#star"/></svg>`).join('')+Array.from({length:18},(_,i)=>{const s=14+Math.random()*24;
+  return `<svg class="deco" style="color:${colors[(i+6)%10]};left:${Math.random()*100}vw;width:${s}px;height:${s}px;animation-duration:${14+Math.random()*18}s;animation-delay:-${Math.random()*25}s"><use href="#${['heart','flower','star'][i%3]}"/></svg>`}).join('');
+const charts={};
+function draw(id,cfg){charts[id]?.destroy();charts[id]=new Chart($(id),cfg)}
+function count(el,to){const t0=performance.now();(function f(t){const k=Math.min((t-t0)/900,1);el.textContent=kes(to*k);if(k<1)requestAnimationFrame(f)})(t0)}
+async function load(){
+  const d=await(await fetch('/api/summary?month='+$('month').value)).json();
+  const m=$('mood');m.className='card mood '+d.status;m.style.setProperty('--n',0);
+  m.innerHTML=ic(d.status=='good'?'check':d.status=='bad'?'alert':'star','',`color:${d.status=='good'?'#e8588f':d.status=='bad'?'#ffd6e2':'#ff9a6b'}`)+d.message;
+  count($('sB'),d.total_budget);count($('sS'),d.total_spent);count($('sL'),d.report.left);count($('sE'),d.extra);
+  const hasSpend=d.total_spent>0,labels=d.cats.map(c=>c.name);
+  draw('pie',{type:'pie',data:{labels,datasets:[{data:d.cats.map(c=>hasSpend?c.spent:c.budget),backgroundColor:colors,borderColor:'#fff',borderWidth:3}]},
+    options:{plugins:{title:{display:!hasSpend,text:'No spending yet - showing your budget plan'},tooltip:{callbacks:{label:c=>{const p=d.cats[c.dataIndex];return `${c.label}: ${kes(c.raw)} (${hasSpend?p.spent_pct:p.pct}%)`}}}},animation:{animateRotate:true,duration:1400}}});
+  draw('bars',{type:'bar',data:{labels,datasets:[{label:'Budget',data:d.cats.map(c=>c.budget),backgroundColor:'#ffc4aa',borderRadius:8},{label:'Spent',data:d.cats.map(c=>c.spent),backgroundColor:'#7b1e3a',borderRadius:8}]},
+    options:{animation:{duration:1400,easing:'easeOutBounce'},scales:{x:{ticks:{maxRotation:60}}}}});
+  draw('line',{type:'line',data:{labels:d.traj.map(t=>t.month),datasets:[{label:'Spent',data:d.traj.map(t=>t.spent),borderColor:'#7b1e3a',backgroundColor:'rgba(232,88,143,.22)',fill:true,tension:.4,pointRadius:6,pointBackgroundColor:'#7b1e3a'},{label:'Budget',data:d.traj.map(t=>t.budget),borderColor:'#ffa585',borderDash:[6,6],tension:.4}]},options:{animation:{duration:1600}}});
+  $('trend').textContent=d.trend||'Add a second month of spending to see your trajectory.';
+  $('tbl').innerHTML='<tr><th>Category</th><th>Budget</th><th>%</th><th>Spent</th><th style="width:25%">Progress</th></tr>'+d.cats.map((c,i)=>{const w=Math.min(c.budget?c.spent/c.budget*100:0,100);
+    return `<tr><td><span class="dot" style="background:${colors[i]}"></span>${c.name}</td><td>${kes(c.budget)}</td><td>${c.pct}%</td><td>${kes(c.spent)}</td><td><div class="bar"><i class="${c.spent>c.budget?'over':''}" style="width:${w}%"></i></div></td></tr>`}).join('');
+  const r=d.report;
+  $('rep').innerHTML=hasSpend?`<p style="--c:var(--pink)">${ic('trophy')}Highest: <b>${r.highest.name}</b> (${kes(r.highest.spent)}, ${r.highest.spent_pct}% of spending)</p>
+   <p style="--c:var(--mint)">${ic('sprout')}Lowest: <b>${r.lowest.name}</b> (${kes(r.lowest.spent)})</p>
+   <p style="--c:var(--lav)">${ic('gem')}Biggest single expense: <b>${kes(r.biggest.amount)}</b> on ${r.biggest.category}</p>
+   <p style="--c:var(--sky)">${ic('cal')}Daily average: <b>${kes(r.avg_day)}</b> · ${r.count} expenses</p>
+   <p style="--c:var(--peach)">${ic('wallet')}Saved: <b>${kes(r.saved)}</b></p>`:'<p>No spending logged yet this month.</p>';
+  $('tx').innerHTML=d.tx.map(t=>`<tr><td>${t.d}</td><td>${t.kind=='income'?ic('coin','','color:#e8588f'):ic('bag','','color:#7b1e3a')} ${t.category}</td><td>${t.note||''}</td><td>${t.kind=='income'?'+':'-'}${kes(t.amount)}</td><td><button class="del" onclick="del('${t.kind}',${t.id})">${ic('x')}</button></td></tr>`).join('')||'<tr><td>Nothing yet.</td></tr>';
+}
+async function add(kind){
+  const p=kind=='expense'?{category:$('eCat').value,amount:$('eAmt').value,note:$('eNote').value,date:$('eDate').value}:{amount:$('iAmt').value,note:$('iNote').value,date:$('iDate').value};
+  const r=await fetch('/api/'+kind,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+  if(!r.ok)return alert((await r.json()).error);
+  $(kind=='expense'?'eAmt':'iAmt').value='';$(kind=='expense'?'eNote':'iNote').value='';
+  $('month').value=p.date.slice(0,7);load();
+}
+async function del(k,id){if(confirm('Delete this entry?')){await fetch(`/api/${k}/${id}`,{method:'DELETE'});load()}}
+$('month').onchange=load;load();
+const NS='http://www.w3.org/2000/svg',gl=['#ff7eb3','#e8588f','#ffffff','#c9b6ff','#ffc4aa'];
+function sp(x,y){const e=document.createElementNS(NS,'svg'),u=document.createElementNS(NS,'use'),z=8+Math.random()*14;
+  e.setAttribute('class','spark');u.setAttribute('href','#star');e.append(u);
+  e.style.cssText=`left:${x}px;top:${y}px;width:${z}px;height:${z}px;color:${gl[Math.random()*5|0]};--dx:${(Math.random()-.5)*60}px;margin:${-z/2}px 0 0 ${-z/2}px`;
+  document.body.append(e);setTimeout(()=>e.remove(),900)}
+let last=0;
+document.addEventListener('mousemove',e=>{if(e.target.closest('.card,button')&&e.timeStamp-last>45){last=e.timeStamp;sp(e.clientX,e.clientY)}});
+document.addEventListener('click',e=>{if(e.target.closest('button'))for(let i=0;i<12;i++)sp(e.clientX+(Math.random()-.5)*60,e.clientY+(Math.random()-.5)*30)});
+document.querySelectorAll('.card').forEach((c,i)=>c.style.setProperty('--n',i));
+
+</script></body></html>
